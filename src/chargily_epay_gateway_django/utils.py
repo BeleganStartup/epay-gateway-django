@@ -8,7 +8,7 @@ def get_api_key():
     try:
         api_key = settings.CHARGILY_API_KEY
     except AttributeError:
-        raise ex.ChargilyErrorAPIMissing('CHARGILY_API_KEY')
+        raise ex.ChargilyErrorDjangoKeysMissing('CHARGILY_API_KEY')
     return api_key
 
 
@@ -16,5 +16,5 @@ def get_secret_key():
     try:
         secret_key = settings.CHARGILY_SECRET_KEY
     except AttributeError:
-        raise ex.ChargilyErrorAPIMissing('CHARGILY_SECRET_KEY')
+        raise ex.ChargilyErrorDjangoKeysMissing('CHARGILY_SECRET_KEY')
     return secret_key
