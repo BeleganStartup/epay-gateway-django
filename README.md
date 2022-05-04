@@ -43,7 +43,7 @@ pipenv install chargily-epay-gateway-django
 from django.shortcuts import render
 
 from chargily_epay_gateway_django.views import InvoiceView
-from chargily_epay_gateway_django.forms import InvoiceForm
+from chargily_epay_gateway_django.forms import InvoiceForm  # You can customize this form if you like
 
 class MakePayment(InvoiceView):
 
@@ -55,7 +55,7 @@ class MakePayment(InvoiceView):
         return render(request, 'payment.html', context)
 
     def post(self, request):
-        form = InvoiceForm(data=request.POST)
+        form = InvoiceForm(data=request.POST) 
         context = {
             'form': form,
             'data': None,
@@ -70,6 +70,14 @@ class MakePayment(InvoiceView):
                 context['errors'] = [value for value in response['errors'].items()]
         return render(request, 'payment.html', context)
 ```
+
+Output example:
+
+* Wrong inputs
+![Wrong inputs](https://scontent.fist4-1.fna.fbcdn.net/v/t1.15752-9/279546536_515119966919096_4807134273052621412_n.png?_nc_cat=105&ccb=1-5&_nc_sid=ae9488&_nc_ohc=liw7awHFEYQAX-2qawy&_nc_ht=scontent.fist4-1.fna&oh=03_AVJIc7iZ4U5-QziGdKiYJhWi0Sz93TfSb1bHgYvOwZ-P4Q&oe=6296BE5C "Wrong inputs")
+
+* Correct inputs
+![Correct inputs](https://scontent.fist4-1.fna.fbcdn.net/v/t1.15752-9/278810906_1152322268902183_4302638377087918631_n.png?_nc_cat=101&ccb=1-5&_nc_sid=ae9488&_nc_ohc=pr6kUJl0AHEAX_S6Ruj&_nc_ht=scontent.fist4-1.fna&oh=03_AVKEw5KRilzBeuIE-Ei37tLwuWaq-z1_CT-Jn8WTeZ_z0A&oe=629821F9 "Correct inputs")
 
 > You can use `CSRFExemptInvoiceView` instead of `InvoiceView` if you want to ignore csrf validation.
 
@@ -149,14 +157,39 @@ def invoice(request):
     return JsonResponse(response.json(), status=response.status_code)
 ```
 
-2- Validate Chargily Signature:
+2- Webhook Usage:
 
 ```python
-from chargily_epay_gateway.api import webhook_is_valid
+from django.http import JsonResponse
 
-# Return True if signature is valid, otherwise False
-valid_signature = webhook_is_valid(request)
+from chargily_epay_gateway_django.views import WebhookView
+
+from chargily_epay_gateway.utils import signature_is_valid
+
+
+class ChargilyReceiver(WebhookView):
+
+    def post(self, request):
+        valid_signature = signature_is_valid(self.SECRET_KEY, request)
+        if valid_signature:
+            ...
+            # Do whatever you want
+        return JsonResponse({}, status=200)
 ```
+
+3- Don't forget to register your views in urls.py
+```python
+from django.urls import path
+
+from your_app.views import MakePayment, ChargilyReceiver
+
+
+urlpatterns = [
+    path('payment/', MakePayment.as_view(), name='payment'),
+    path('webhook/', ChargilyReceiver.as_view(), name='webhook'),
+]
+```
+
 
 # Configurations
 
@@ -180,11 +213,3 @@ valid_signature = webhook_is_valid(request)
 # Notice
 
 - If you faced Issues [Click here to open one](https://github.com/Chargily/epay-gateway-django)
-
-
-# TODO
-
-1- Create Invoice Model
-2- Create Webhook view
-3- Website urls settings (Try to retreive dynamically)
-4- Complete Webhook documentation
