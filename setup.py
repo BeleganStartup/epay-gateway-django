@@ -31,13 +31,13 @@ your version of Python.
 
 
 setup(
-    name='chargily_epay_gateway_django',
+    name='chargily_epay_gateway_django_plugin',
     version=version,
     long_description=long_description,
     long_description_content_type='text/markdown',
     license='MIT',
-    author="Okba Boularaoui",
-    author_email='okba2fb@gmail.com',
+    author="Chargily",
+    author_email='chargily@gmail.com',
     packages=find_packages('src'),
     package_dir={'': 'src'},
     url='https://github.com/BeleganStartup/epay-gateway-django',
@@ -45,4 +45,9 @@ setup(
     install_requires=[
           'chargily-epay-gateway',
     ],
+    project_urls = {
+    'Global Website': 'https://chargily.com',
+    'DZ Website': 'https://chargily.com.dz',
+    'Github': 'https://github.com/Chargily/epay-gateway-django',
+    }
 )

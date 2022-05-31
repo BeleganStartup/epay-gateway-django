@@ -11,17 +11,17 @@ This Plugin is to integrate ePayment gateway with Chargily easily.
 1. Python 2.7 or higher.
 2. Django 1.11 or higher.
 3. API Key/Secret from [ePay by Chargily](https://epay.chargily.com.dz) dashboard for free.
-4. Our package ![chargily-epay-gateway](https://pypi.org/project/chargily-epay-gateway/ "Chargily ePay Gateway package") for python.
+4. Our package [chargily-epay-gateway](https://pypi.org/project/chargily-epay-gateway/) for python.
 
 # Installation
 Using pip
 ```bash
-pip install chargily-epay-gateway-django
+pip install chargily-epay-gateway-django-plugin
 ```
 
 or pipenv
 ```bash
-pipenv install chargily-epay-gateway-django
+pipenv install chargily-epay-gateway-django-plugin
 ```
 
 # Quick start
